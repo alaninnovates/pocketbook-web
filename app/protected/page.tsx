@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
-import { FetchDataSteps } from "@/components/tutorial/fetch-data-steps";
 import { Suspense } from "react";
 
 async function UserDetails() {
@@ -35,7 +34,6 @@ export default function ProtectedPage() {
       </section>
       <section className="content-section">
         <h2>Next steps</h2>
-        <FetchDataSteps />
       </section>
     </div>
   );

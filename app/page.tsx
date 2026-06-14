@@ -1,6 +1,5 @@
 "use client";
 import {
-    Badge,
     Button,
     Card,
     Center,
@@ -20,10 +19,9 @@ export default function Home() {
         <Center
             mih="100dvh"
             p="md"
-            bg={`linear-gradient(135deg, ${theme.colors.grape[6]}, ${theme.colors.indigo[4]})`}
+            bg="grape.1"
         >
             <Card
-                shadow="xl"
                 radius="lg"
                 padding="xl"
                 withBorder

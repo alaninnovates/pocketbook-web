@@ -80,7 +80,7 @@ export function LoginForm({className, ...props}: React.ComponentPropsWithoutRef<
             const {error} = await supabase.auth.signInWithOAuth({
                 provider,
                 options: {
-                    redirectTo: `${window.location.origin}/auth/callback?next=/protected`,
+                    redirectTo: `${window.location.origin}/auth/callback`,
                 },
             });
 
@@ -97,7 +97,6 @@ export function LoginForm({className, ...props}: React.ComponentPropsWithoutRef<
             component="section"
             p="xl"
             radius="md"
-            shadow="sm"
             withBorder
             w="100%"
             {...props}
@@ -117,7 +116,7 @@ export function LoginForm({className, ...props}: React.ComponentPropsWithoutRef<
                             id="email"
                             label="Email"
                             type="email"
-                            placeholder="m@example.com"
+                            placeholder="me@example.com"
                             required
                             value={email}
                             disabled={oauthLoading !== null}

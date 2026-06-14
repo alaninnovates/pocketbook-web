@@ -1,8 +1,8 @@
 import '@mantine/core/styles.css';
 
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import {Rubik} from "next/font/google";
+import {ColorSchemeScript, MantineProvider, mantineHtmlProps, createTheme} from '@mantine/core';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -14,8 +14,12 @@ export const metadata: Metadata = {
   description: "The fastest way to build apps with Next.js and Supabase",
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const theme = createTheme({
+    fontFamily: "var(--font-rubik), sans-serif"
+});
+
+const rubik = Rubik({
+  variable: "--font-rubik",
   display: "swap",
   subsets: ["latin"],
 });
@@ -30,8 +34,8 @@ export default function RootLayout({
     <head>
         <ColorSchemeScript />
     </head>
-      <body className={geistSans.className}>
-        <MantineProvider>
+      <body className={rubik.className}>
+        <MantineProvider theme={theme}>
           {children}
         </MantineProvider>
       </body>

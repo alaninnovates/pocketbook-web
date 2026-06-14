@@ -1,20 +1,24 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import {createClient} from "@/lib/supabase/client";
+import {Button} from "@mantine/core";
+import {useRouter} from "next/navigation";
+import {useState} from "react";
 
 export function LogoutButton() {
-  const router = useRouter();
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
 
-  const logout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/auth/login");
-  };
+    const logout = async () => {
+        setIsLoading(true);
+        const supabase = createClient();
+        await supabase.auth.signOut();
+        router.push("/auth/login");
+    };
 
-  return (
-    <button className="button button-secondary" onClick={logout}>
-      Logout
-    </button>
-  );
+    return (
+        <Button variant="default" onClick={logout} loading={isLoading}>
+            Logout
+        </Button>
+    );
 }

@@ -1,98 +1,173 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import {useRouter} from "next/navigation";
+import {useState} from "react";
+import {createClient} from "@/lib/supabase/client";
+import {
+    Alert,
+    Button,
+    Divider,
+    Paper,
+    PasswordInput,
+    Stack,
+    Text,
+    TextInput,
+    Title,
+} from "@mantine/core";
+import {SiApple, SiDiscord, SiGoogle} from "@icons-pack/react-simple-icons";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+type OAuthProvider = "google" | "discord" | "apple";
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const supabase = createClient();
-    setIsLoading(true);
-    setError(null);
+const oauthProviders: { label: string; provider: OAuthProvider, icon: React.ReactNode }[] = [
+    {
+        label: "Google",
+        provider: "google",
+        icon: (
+            <SiGoogle size={18}/>
+        )
+    },
+    {
+        label: "Discord",
+        provider: "discord",
+        icon: (
+            <SiDiscord size={18}/>
+        )
+    },
+    {
+        label: "Apple",
+        provider: "apple",
+        icon: (
+            <SiApple size={18}/>
+        )
+    },
+];
 
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/protected");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+export function LoginForm({className, ...props}: React.ComponentPropsWithoutRef<"div">) {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [oauthLoading, setOauthLoading] = useState<OAuthProvider | null>(null);
+    const router = useRouter();
 
-  return (
-    <div className={`auth-form ${className ?? ""}`} {...props}>
-      <section className="card">
-        <header className="card-header">
-          <h1 className="card-title">Login</h1>
-          <p className="card-description">
-            Enter your email below to login to your account
-          </p>
-        </header>
-        <div className="card-content">
-          <form onSubmit={handleLogin}>
-            <div className="form-stack">
-              <div className="field">
-                <label htmlFor="email">Email</label>
-                <input
-                  className="input"
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="field">
-                <div className="field-row">
-                  <label htmlFor="password">Password</label>
-                  <Link
-                    href="/auth/forgot-password"
-                    className="text-link"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
-                <input
-                  className="input"
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="form-error">{error}</p>}
-              <button className="button button-primary full-width" type="submit" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Login"}
-              </button>
-            </div>
-            <div className="form-footer">
-              Don&apos;t have an account?{" "}
-              <Link href="/auth/sign-up" className="text-link">
-                Sign up
-              </Link>
-            </div>
-          </form>
-        </div>
-      </section>
-    </div>
-  );
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const supabase = createClient();
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const {error} = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+            if (error) throw error;
+            // Update this route to redirect to an authenticated route. The user already has an active session.
+            router.push("/protected");
+        } catch (error: unknown) {
+            setError(error instanceof Error ? error.message : "An error occurred");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleOAuthLogin = async (provider: OAuthProvider) => {
+        const supabase = createClient();
+        setOauthLoading(provider);
+        setError(null);
+
+        try {
+            const {error} = await supabase.auth.signInWithOAuth({
+                provider,
+                options: {
+                    redirectTo: `${window.location.origin}/auth/callback?next=/protected`,
+                },
+            });
+
+            if (error) throw error;
+        } catch (error: unknown) {
+            setError(error instanceof Error ? error.message : "An error occurred");
+            setOauthLoading(null);
+        }
+    };
+
+    return (
+        <Paper
+            className={className}
+            component="section"
+            p="xl"
+            radius="md"
+            shadow="sm"
+            withBorder
+            w="100%"
+            {...props}
+        >
+            <Stack gap="lg">
+                <Stack gap={4}>
+                    <Title order={1} size="h2">
+                        Login
+                    </Title>
+                    <Text c="dimmed" size="sm">
+                        Enter your email below to login to PocketBook
+                    </Text>
+                </Stack>
+                <form onSubmit={handleLogin}>
+                    <Stack gap="md">
+                        <TextInput
+                            id="email"
+                            label="Email"
+                            type="email"
+                            placeholder="m@example.com"
+                            required
+                            value={email}
+                            disabled={oauthLoading !== null}
+                            onChange={(event) => setEmail(event.currentTarget.value)}
+                        />
+                        <PasswordInput
+                            id="password"
+                            label="Password"
+                            required
+                            value={password}
+                            disabled={oauthLoading !== null}
+                            onChange={(event) => setPassword(event.currentTarget.value)}
+                        />
+                        {error ? (
+                            <Alert color="red" variant="light">
+                                {error}
+                            </Alert>
+                        ) : null}
+                        <Button
+                            fullWidth
+                            type="submit"
+                            loading={isLoading}
+                            disabled={oauthLoading !== null}
+                            color="grape"
+                        >
+                            Login
+                        </Button>
+                        <Divider label="or continue with social" labelPosition="center"/>
+                        <Stack gap="xs">
+                            {oauthProviders.map(({icon, label, provider}) => (
+                                <Button
+                                    key={provider}
+                                    fullWidth
+                                    type="button"
+                                    variant="default"
+                                    onClick={() => handleOAuthLogin(provider)}
+                                    loading={oauthLoading === provider}
+                                    disabled={
+                                        isLoading ||
+                                        (oauthLoading !== null && oauthLoading !== provider)
+                                    }
+                                    leftSection={icon}
+                                >
+                                    Continue with {label}
+                                </Button>
+                            ))}
+                        </Stack>
+                    </Stack>
+                </form>
+            </Stack>
+        </Paper>
+    );
 }

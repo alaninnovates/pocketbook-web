@@ -19,7 +19,7 @@ export default function Home() {
         <Center
             mih="100dvh"
             p="md"
-            bg="grape.1"
+            bg="blue.1"
         >
             <Card
                 radius="lg"
@@ -49,7 +49,7 @@ export default function Home() {
                     </Stack>
 
                     <Group w="100%" grow>
-                        <Button component={Link} href="/auth/login" size="md" color="grape">
+                        <Button component={Link} href="/auth/login" size="md">
                             Go to Login
                         </Button>
                         <Button

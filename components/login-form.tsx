@@ -140,7 +140,6 @@ export function LoginForm({className, ...props}: React.ComponentPropsWithoutRef<
                             type="submit"
                             loading={isLoading}
                             disabled={oauthLoading !== null}
-                            color="grape"
                         >
                             Login
                         </Button>

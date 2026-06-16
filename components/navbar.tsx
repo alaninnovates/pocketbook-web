@@ -1,5 +1,5 @@
 "use client"
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
     Avatar, Box,
     Burger,
@@ -16,13 +16,49 @@ import {
 import {useDisclosure} from '@mantine/hooks';
 import icon from "@/app/icon.png";
 import Image from "next/image";
-import {CaretDownIcon, GearIcon, SignOutIcon} from '@phosphor-icons/react'
+import {CaretDownIcon} from '@phosphor-icons/react'
+import {LogoutMenuItem} from "@/components/logout-menu-item";
+import {createClient} from "@/lib/supabase/client";
+import {redirect} from "next/navigation";
 
-const user = {
-    name: 'Jane Spoonfighter',
-    email: 'janspoon@fighter.dev',
-    image: 'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-5.png',
-};
+function UserDetails() {
+    const [userName, setUserName] = useState();
+    const [userImage, setUserImage] = useState();
+
+    useEffect(() => {
+        const supabase = createClient();
+
+        (async () => {
+            const {data: claims, error: claimsError} = await supabase.auth.getClaims();
+            if (claimsError || !claims?.claims) {
+                redirect("/auth/login");
+            }
+
+            const {data: profile, error: profileError} = await supabase
+                .from("profiles")
+                .select("name, avatar_url")
+                .eq("id", claims.claims.sub)
+                .single();
+
+            if (profileError) {
+                console.error("err profile:", profileError);
+                return;
+            }
+
+            setUserName(profile?.name || "Unknown User");
+            setUserImage(profile?.avatar_url || "");
+        })()
+    }, []);
+
+    return (
+        <>
+            <Avatar src={userImage} alt="" radius="xl" size={20}/>
+            <Text fw={500} size="sm" lh={1} mr={3}>
+                {userName}
+            </Text>
+        </>
+    )
+}
 
 export const Navbar = () => {
     const theme = useMantineTheme();
@@ -76,19 +112,13 @@ export const Navbar = () => {
                                 }}
                             >
                                 <Group gap={7}>
-                                    <Avatar src={user.image} alt="" radius="xl" size={20}/>
-                                    <Text fw={500} size="sm" lh={1} mr={3}>
-                                        {user.name}
-                                    </Text>
+                                    <UserDetails />
                                     <CaretDownIcon size={12} stroke={"1.5"}/>
                                 </Group>
                             </UnstyledButton>
                         </Menu.Target>
                         <Menu.Dropdown>
-                            <Menu.Item leftSection={<GearIcon size={16} stroke={"1.5"}/>}>
-                                Account settings
-                            </Menu.Item>
-                            <Menu.Item leftSection={<SignOutIcon size={16} stroke={"1.5"}/>}>Log out</Menu.Item>
+                            <LogoutMenuItem/>
                         </Menu.Dropdown>
                     </Menu>
                 </Group>

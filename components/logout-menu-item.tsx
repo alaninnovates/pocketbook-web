@@ -1,11 +1,12 @@
 "use client";
 
 import {createClient} from "@/lib/supabase/client";
-import {Button} from "@mantine/core";
+import {Menu} from "@mantine/core";
 import {useRouter} from "next/navigation";
 import {useState} from "react";
+import {SignOutIcon} from "@phosphor-icons/react";
 
-export function LogoutButton() {
+export function LogoutMenuItem() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -17,8 +18,8 @@ export function LogoutButton() {
     };
 
     return (
-        <Button variant="default" onClick={logout} loading={isLoading}>
-            Logout
-        </Button>
+        <Menu.Item leftSection={<SignOutIcon size={16} stroke={"1.5"}/>} onClick={logout} disabled={isLoading}>
+            Log out
+        </Menu.Item>
     );
 }

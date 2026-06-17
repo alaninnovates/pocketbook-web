@@ -1,5 +1,6 @@
 "use client"
 import {
+    Text,
     Container,
     Menu,
     MenuDropdown,
@@ -15,8 +16,24 @@ import {
     UnstyledButton
 } from "@mantine/core";
 import {CaretLeftIcon, DotsThreeIcon, TrashIcon, UploadSimpleIcon} from "@phosphor-icons/react";
+import {modals} from "@mantine/modals";
 
 export default function EnsemblePage() {
+    const openDeleteModal = () =>
+        modals.openConfirmModal({
+            title: 'Delete show',
+            centered: true,
+            children: (
+                <Text size="sm">
+                    Are you sure you want to delete this show? This action is irreversable.
+                </Text>
+            ),
+            labels: { confirm: 'Delete show', cancel: "No, don't delete it" },
+            confirmProps: { color: 'red' },
+            onCancel: () => console.log('Cancel'),
+            onConfirm: () => console.log('Confirmed'),
+        });
+
     return (
         <Container w="100%">
             <UnstyledButton onClick={() => window.history.back()} my="md" display="flex" dir="row" style={{alignItems: "center", gap: 8}}>
@@ -53,6 +70,7 @@ export default function EnsemblePage() {
                                     <MenuItem
                                         color="red"
                                         leftSection={<TrashIcon size={14}/>}
+                                        onClick={openDeleteModal}
                                     >
                                         Delete
                                     </MenuItem>

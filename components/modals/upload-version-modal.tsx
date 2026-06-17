@@ -2,6 +2,7 @@ import {ContextModalProps} from "@mantine/modals";
 import {Group, Text} from "@mantine/core";
 import {Dropzone, DropzoneAccept, DropzoneIdle, DropzoneReject} from "@mantine/dropzone";
 import {ImageIcon, UploadSimpleIcon, XIcon} from "@phosphor-icons/react";
+import {notifications} from "@mantine/notifications";
 
 // to close: context.closeModal(id)
 export const UploadVersionModal = ({
@@ -11,7 +12,13 @@ export const UploadVersionModal = ({
                                    }: ContextModalProps<{ showId: number }>) => (
     <>
         <Dropzone
-            onDrop={(files) => console.log('accepted files', files)}
+            onDrop={(files) => {
+                console.log('accepted files', files);
+                notifications.show({
+                    title: 'Default notification',
+                    message: 'ok',
+                })
+            }}
             onReject={(files) => console.log('rejected files', files)}
             maxSize={5 * 1024 ** 2}
             accept={{

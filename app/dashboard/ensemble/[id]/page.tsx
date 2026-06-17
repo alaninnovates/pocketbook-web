@@ -1,5 +1,6 @@
 "use client"
 import {
+    Title,
     Text,
     Container,
     Menu,
@@ -13,7 +14,7 @@ import {
     TableTh,
     TableThead,
     TableTr,
-    UnstyledButton
+    UnstyledButton, Button
 } from "@mantine/core";
 import {CaretLeftIcon, DotsThreeIcon, TrashIcon, UploadSimpleIcon} from "@phosphor-icons/react";
 import {modals} from "@mantine/modals";
@@ -65,6 +66,14 @@ export default function EnsemblePage() {
         })();
     }, [ensembleId]);
 
+    const openUploadShowModal = () =>
+        modals.openContextModal({
+            modal: 'uploadShow',
+            title: 'Upload New Show',
+            innerProps: {},
+            size: "lg"
+        });
+
     const openDeleteModal = () =>
         modals.openConfirmModal({
             title: 'Delete show',
@@ -99,7 +108,10 @@ export default function EnsemblePage() {
             <UnstyledButton onClick={() => window.history.back()} my="md" display="flex" dir="row" style={{alignItems: "center", gap: 8}}>
                 <CaretLeftIcon size={18}/> Back to ensembles
             </UnstyledButton>
-            <h1>{ensemble.name}</h1>
+            <Title mb="lg">{ensemble.name}</Title>
+            <Button leftSection={<UploadSimpleIcon size={14}/>} mb="sm" onClick={openUploadShowModal}>
+                Upload New Show
+            </Button>
             <Table>
                 <TableThead>
                     <TableTr>

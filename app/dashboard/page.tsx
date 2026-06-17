@@ -1,7 +1,7 @@
 "use client"
 import {useEffect, useState} from "react";
 import {redirect} from "next/navigation";
-import {Container, Box, Flex, Card, Text, CardSection, Button, Image} from "@mantine/core";
+import {Container, Box, Flex, Card, Text, CardSection, Button, Image, Title} from "@mantine/core";
 import {createClient} from "@/lib/supabase/client";
 import Link from "next/link";
 
@@ -65,7 +65,7 @@ export default function DashboardPage() {
 
     return (
         <Container w="100%">
-            <h1>My Ensembles</h1>
+            <Title mb="lg">My Ensembles</Title>
             <Flex
                 gap="md"
                 justify="flex-start"

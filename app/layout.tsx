@@ -1,9 +1,8 @@
 import '@mantine/core/styles.css';
-
+import '@mantine/dropzone/styles.css';
 import type {Metadata} from "next";
 import {Rubik} from "next/font/google";
 import {ColorSchemeScript, MantineProvider, mantineHtmlProps, createTheme} from '@mantine/core';
-import {ModalsProvider} from '@mantine/modals';
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -37,9 +36,7 @@ export default function RootLayout({
         </head>
         <body className={rubik.className}>
         <MantineProvider theme={theme}>
-            <ModalsProvider>
-                {children}
-            </ModalsProvider>
+            {children}
         </MantineProvider>
         </body>
         </html>

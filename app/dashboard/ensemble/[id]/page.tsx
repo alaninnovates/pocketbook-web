@@ -34,6 +34,16 @@ export default function EnsemblePage() {
             onConfirm: () => console.log('Confirmed'),
         });
 
+    const openUploadVersionModal = () =>
+        modals.openContextModal({
+            modal: 'uploadVersion',
+            title: 'Upload New Version',
+            innerProps: {
+                showId: 1
+            },
+            size: "lg"
+        })
+
     return (
         <Container w="100%">
             <UnstyledButton onClick={() => window.history.back()} my="md" display="flex" dir="row" style={{alignItems: "center", gap: 8}}>
@@ -64,7 +74,10 @@ export default function EnsemblePage() {
 
                                 <MenuDropdown>
                                     <MenuLabel>Actions</MenuLabel>
-                                    <MenuItem leftSection={<UploadSimpleIcon size={14}/>}>
+                                    <MenuItem
+                                        leftSection={<UploadSimpleIcon size={14}/>}
+                                        onClick={openUploadVersionModal}
+                                    >
                                         Upload New Version
                                     </MenuItem>
                                     <MenuItem

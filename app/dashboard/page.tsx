@@ -65,7 +65,7 @@ export default function DashboardPage() {
 
     return (
         <Container w="100%">
-            <Title mb="lg">My Ensembles</Title>
+            <Title my="lg">My Ensembles</Title>
             <Flex
                 gap="md"
                 justify="flex-start"

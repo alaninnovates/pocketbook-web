@@ -53,7 +53,7 @@ function UserDetails() {
     return (
         <>
             <Avatar src={userImage} alt="" radius="xl" size={20}/>
-            <Text fw={500} size="sm" lh={1} mr={3}>
+            <Text fw={500} size="sm" lh={1} mr={3} color="white">
                 {userName}
             </Text>
         </>
@@ -72,7 +72,7 @@ export const Navbar = () => {
     return (
         <Box
             pt="sm"
-            bg="gray.1"
+            bg="md3Dark.8"
         >
             <Container pb="sm" size="md">
                 <Group justify="space-between">

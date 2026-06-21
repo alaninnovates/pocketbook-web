@@ -18,7 +18,22 @@ export const metadata: Metadata = {
 };
 
 const theme = createTheme({
-    fontFamily: "var(--font-rubik), sans-serif"
+    fontFamily: "var(--font-rubik), sans-serif",
+    colors: {
+        md3Dark: [
+            '#f6effe',
+            '#e7dbf3',
+            '#cdb5e4',
+            '#b18cd5',
+            '#9969c9',
+            '#8b53c2',
+            '#8448bf',
+            '#713aa8',
+            '#663399',
+            '#572a85'
+        ]
+    },
+    primaryColor: 'md3Dark',
 });
 
 const rubik = Rubik({
@@ -38,7 +53,7 @@ export default function RootLayout({
             <ColorSchemeScript/>
         </head>
         <body className={rubik.className}>
-        <MantineProvider theme={theme}>
+        <MantineProvider theme={theme} forceColorScheme="dark">
             <Notifications />
             {children}
         </MantineProvider>

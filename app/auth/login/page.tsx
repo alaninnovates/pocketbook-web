@@ -7,7 +7,7 @@ export default function Page() {
         <Center
             mih="100dvh"
             p="md"
-            bg="blue.1"
+            bg="md3Dark.8"
         >
             <Container size={420} w="100%">
                 <LoginForm/>

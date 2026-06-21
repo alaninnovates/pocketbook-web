@@ -19,7 +19,7 @@ export default function Home() {
         <Center
             mih="100dvh"
             p="md"
-            bg="blue.1"
+            bg="md3Dark.8"
         >
             <Card
                 radius="lg"
